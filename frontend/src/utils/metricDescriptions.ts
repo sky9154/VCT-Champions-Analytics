@@ -1,0 +1,21 @@
+export const METRIC_DESCRIPTIONS: Record<string, string> = {
+  rating: "綜合回合表現指標，依 API 提供的計算結果呈現。",
+  acs: "平均戰鬥分數，反映每回合的戰鬥貢獻。",
+  kd: "擊殺數除以死亡數。",
+  kast: "至少完成擊殺、助攻、存活或獲得隊友補槍之一的回合比例。",
+  adr: "每回合平均造成傷害。",
+  kpr: "每回合平均擊殺數。",
+  apr: "每回合平均助攻數。",
+  fkfd: "首殺數減去首死數。",
+  fkfdCounts: "依序顯示首殺數與首死數。",
+  fkpr: "每回合平均首殺數。",
+  fdpr: "每回合平均首死數。",
+  hs: "爆頭擊殺占總擊殺的比例。",
+  mapWinPercentage: "獲勝地圖數占已進行地圖數的比例。",
+  matchWinPercentage: "獲勝系列賽數占已進行系列賽數的比例。",
+  roundWinPercentage: "獲勝回合數占已進行回合數的比例。",
+  roundDifferential: "獲勝回合數減去落敗回合數。",
+  attackRoundWinPercentage: "攻方獲勝回合數占攻方已進行回合數的比例。",
+  defenseRoundWinPercentage: "守方獲勝回合數占守方已進行回合數的比例。",
+  firstKillPercentage: "隊伍取得首殺的回合比例。"
+};
