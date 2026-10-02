@@ -18,7 +18,7 @@ export const getUnknownSearchKeys = (params: URLSearchParams, allowedKeys: reado
 
 export const omitDefaultSearchValues = (
   params: URLSearchParams,
-  defaults: Record<string, string>,
+  defaults: Record<string, string>
 ): URLSearchParams | null => {
   const nextParams = new URLSearchParams(params);
   let changed = false;
@@ -38,7 +38,7 @@ export const setSearchValue = (
   params: URLSearchParams,
   key: string,
   value: string,
-  defaultValue?: string,
+  defaultValue?: string
 ): URLSearchParams => {
   const nextParams = new URLSearchParams(params);
   nextParams.delete(key);

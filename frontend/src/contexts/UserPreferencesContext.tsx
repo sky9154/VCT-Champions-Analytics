@@ -46,7 +46,7 @@ const loadPreferences = (): UserPreferences => {
       timeZone: values.timeZone === "UTC" ? "UTC" : "Asia/Taipei",
       motion: values.motion === "full" || values.motion === "reduced" ? values.motion : "system",
       trendRange: values.trendRange === "last5" || values.trendRange === "last10" ? values.trendRange : "all",
-      trendInterval: values.trendInterval === "map" ? "map" : "match",
+      trendInterval: values.trendInterval === "map" ? "map" : "match"
     };
   } catch {
     return DEFAULT_PREFERENCES;
@@ -70,7 +70,7 @@ const UserPreferencesProvider = ({ children }: { children: ReactNode }) => {
 
   const contextValue = useMemo<PreferencesContextValue>(() => ({
     preferences,
-    updatePreference: (key, value) => setPreferences((current) => ({ ...current, [key]: value })),
+    updatePreference: (key, value) => setPreferences((current) => ({ ...current, [key]: value }))
   }), [preferences]);
 
   return <PreferencesContext.Provider value={contextValue}>{children}</PreferencesContext.Provider>;

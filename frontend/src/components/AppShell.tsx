@@ -237,7 +237,7 @@ const AppShell = ({ children }: AppShellProps) => {
       phase: "getting_source",
       dataAsOf: currentStatus?.dataAsOf ?? previous?.dataAsOf ?? null,
       lastImportedAt: currentStatus?.lastImportedAt ?? previous?.lastImportedAt ?? null,
-      summary: null,
+      summary: null
     }));
 
     const startController = new AbortController();
@@ -254,7 +254,7 @@ const AppShell = ({ children }: AppShellProps) => {
         phase: previous?.phase ?? "getting_source",
         dataAsOf: previous?.dataAsOf ?? null,
         lastImportedAt: previous?.lastImportedAt ?? null,
-        summary: previous?.summary ?? null,
+        summary: previous?.summary ?? null
       }));
     } catch (startError) {
       if (isAbortError(startError)) {
@@ -287,7 +287,7 @@ const AppShell = ({ children }: AppShellProps) => {
         phase: null,
         dataAsOf: previous?.dataAsOf ?? currentStatus?.dataAsOf ?? null,
         lastImportedAt: previous?.lastImportedAt ?? currentStatus?.lastImportedAt ?? null,
-        summary: previous?.summary ?? null,
+        summary: previous?.summary ?? null
       }));
     } finally {
       if (updateStartRequest.current === startController) {
@@ -303,7 +303,7 @@ const AppShell = ({ children }: AppShellProps) => {
     if (currentWidth <= 900) {
       return Math.max(
         SEARCH_COLLAPSED_NARROW_WIDTH,
-        Math.min(SEARCH_EXPANDED_DESKTOP_WIDTH, currentWidth - 132),
+        Math.min(SEARCH_EXPANDED_DESKTOP_WIDTH, currentWidth - 132)
       );
     }
 
@@ -585,7 +585,7 @@ const AppShell = ({ children }: AppShellProps) => {
     dataAsOf: displayedDataAsOf,
     lastImportedAt: displayedLastImportedAt,
     summary: dataUpdateStatus?.summary ?? null,
-    onStart: () => void handleDataUpdate(),
+    onStart: () => void handleDataUpdate()
   } as const;
 
   return (
@@ -624,17 +624,17 @@ const AppShell = ({ children }: AppShellProps) => {
                     height: {
                       duration: shouldReduceMotion ? 0 : isMobileNavOpen ? 0.3 : 0.12,
                       delay: shouldReduceMotion ? 0 : isMobileNavOpen ? 0.04 : 0.12,
-                      ease: ROUTE_EASING,
+                      ease: ROUTE_EASING
                     },
                     opacity: {
                       duration: shouldReduceMotion ? 0 : isMobileNavOpen ? 0.2 : 0.08,
                       delay: shouldReduceMotion ? 0 : isMobileNavOpen ? 0.04 : 0.12,
-                      ease: ROUTE_EASING,
+                      ease: ROUTE_EASING
                     },
                     y: {
                       duration: shouldReduceMotion ? 0 : isMobileNavOpen ? 0.3 : 0.12,
                       delay: shouldReduceMotion ? 0 : isMobileNavOpen ? 0.04 : 0.12,
-                      ease: ROUTE_EASING,
+                      ease: ROUTE_EASING
                     }
                   }
                 }}
@@ -811,7 +811,7 @@ const AppShell = ({ children }: AppShellProps) => {
                           }}
                           transition={{
                             duration: shouldReduceMotion ? 0 : 0.18,
-                            ease: ROUTE_EASING,
+                            ease: ROUTE_EASING
                           }}
                           style={{ pointerEvents: isSearchOpen ? "auto" : "none" }}
                         >
@@ -900,7 +900,7 @@ const AppShell = ({ children }: AppShellProps) => {
           <div className="app-content">{children}</div>
         </div>
         <footer className="app-footer">
-          <span className="footer-copyright">Copyright © 2026 oF｜原始程式碼採 Apache-2.0 授權</span>
+          <span className="footer-copyright">Copyright © 2026 oF | 原始程式碼採 Apache-2.0 授權</span>
         </footer>
       </>
     </ManualUpdateProvider>

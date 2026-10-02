@@ -88,7 +88,7 @@ export const formatDateTimeForZone = (value: string | null, timeZone: "Asia/Taip
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    hourCycle: "h23",
+    hourCycle: "h23"
   }).formatToParts(date);
   const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value ?? "";
   const suffix = timeZone === "UTC" ? "UTC" : "GMT+8";

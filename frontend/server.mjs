@@ -131,7 +131,7 @@ const sendJson = (request, response, statusCode, payload) => {
   response.writeHead(statusCode, {
     "Cache-Control": "no-store",
     "Content-Length": body.length,
-    "Content-Type": "application/json; charset=utf-8",
+    "Content-Type": "application/json; charset=utf-8"
   });
   response.end(request.method === "HEAD" ? undefined : body);
 };
@@ -263,7 +263,7 @@ const sendFile = async (request, response, filePath, relativePath, requestPath, 
     "Cache-Control": getCacheControl(relativePath),
     "Content-Length": fileInfo.size,
     "Content-Type": contentType,
-    "Last-Modified": fileInfo.mtime.toUTCString(),
+    "Last-Modified": fileInfo.mtime.toUTCString()
   });
 
   if (request.method === "HEAD") {
@@ -284,7 +284,7 @@ const sendFile = async (request, response, filePath, relativePath, requestPath, 
       error: {
         code: "INTERNAL_ERROR",
         message: "目前無法提供前端檔案。"
-      },
+      }
     });
   });
   fileStream.pipe(response);
@@ -390,7 +390,7 @@ const startServer = async () => {
 
     if (!rawPathname.startsWith("/") || rawPathname.startsWith("//")) {
       sendJson(request, response, 400, {
-        error: { code: "INVALID_PARAMETER", message: "要求的路徑格式無效。" },
+        error: { code: "INVALID_PARAMETER", message: "要求的路徑格式無效。" }
       });
       return;
     }
@@ -404,7 +404,7 @@ const startServer = async () => {
       response.setHeader("Allow", "GET, HEAD");
 
       sendJson(request, response, 405, {
-        error: { code: "INVALID_PARAMETER", message: "此前端路徑不支援要求的方法。" },
+        error: { code: "INVALID_PARAMETER", message: "此前端路徑不支援要求的方法。" }
       });
 
       return;
@@ -425,7 +425,7 @@ const startServer = async () => {
       || decodedPathname.includes("\0")
       || decodedPathname.split("/").some((segment) => segment === "." || segment === "..")) {
       sendJson(request, response, 400, {
-        error: { code: "INVALID_PARAMETER", message: "要求的路徑格式無效。" },
+        error: { code: "INVALID_PARAMETER", message: "要求的路徑格式無效。" }
       });
 
       return;

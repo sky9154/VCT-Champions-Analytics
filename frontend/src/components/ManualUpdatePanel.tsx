@@ -67,7 +67,7 @@ const ManualUpdatePanel = ({
   dataAsOf,
   summary,
   onStart,
-  timeZone,
+  timeZone
 }: ManualUpdatePanelProps) => {
   const isActive = status === "running" || status === "busy";
   const buttonLabel = apiState === "checking"
