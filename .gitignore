@@ -1,0 +1,22 @@
+# Local environment files
+.env
+.env.local
+
+# Existing frontend/Python build artifacts
+/frontend/node_modules/
+/frontend/dist/
+__pycache__/
+/backend/vct_analytics_backend.egg-info/
+*.tsbuildinfo
+*.log
+
+# Backend-generated local data
+/backend/var/cache/
+/backend/var/run/
+/backend/var/reports/
+/backend/var/data/vct-reference/vct.duckdb
+/backend/var/data/vct-reference/source-metadata.json
+/backend/var/backups/vct-reference/*.duckdb
+
+# Local-only project files
+/docs/

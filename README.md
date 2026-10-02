@@ -1,155 +1,105 @@
 # VCT Champions 2026 Analytics
 
-An internal-network analytics application for VCT Champions 2026. The web interface covers schedules, teams, players, rankings, and trends. Liquipedia supplies the canonical schedule, the VCT Reference DuckDB snapshot supplies verified match statistics, and MongoDB stores application data. The web server provides one private-network entry point and proxies `/api` requests to the API service on the same host.
+A web application for exploring VCT Champions 2026 schedules, teams, players, rankings, and match trends. Liquipedia is the canonical schedule source. Verified match statistics come from the VCT Reference DuckDB snapshot, and MongoDB stores application data.
 
 ## Features
 
-- Event overview, schedule status, and filters
-- Team and player rankings, details, search, and trend charts
-- Data reconciliation, imports, snapshot validation, and import status
-- Manual data updates from Settings
-- Responsive web interface for desktop and mobile
+- Event overview, schedule, and stage filters
+- Team and player rankings, profiles, and search
+- Match and map statistics with trend charts
+- Manual data updates from Settings and saved import status
 
 ## Architecture
 
 ```text
-Browser on the local network
-        |
-        v
-Web server :5577
-React application + same-origin /api proxy
-        |
-        v
-API service 127.0.0.1:8591
-        |
-        +-- MongoDB
-        +-- Liquipedia API
-        +-- VCT Reference DuckDB snapshot
-        +-- Local team logo assets
+Browser
+  │ same-origin /api requests
+  ▼
+Web server 0.0.0.0:5577
+  ├─ serves frontend/dist/
+  └─ proxies /api/* to 127.0.0.1:8591
+                         │
+                         ▼
+                    API service
+                      ├─ MongoDB
+                      ├─ Liquipedia API
+                      └─ VCT Reference DuckDB snapshot
 ```
 
-The web server listens on all network interfaces at port 5577 for private-network access. Port 8591 remains bound to loopback. Other devices connect only to the web server; its same-origin `/api` proxy forwards requests to the local API service.
+In production, the web server serves the built files from `frontend/dist/` and proxies same-origin `/api/*` requests to the API service. The API service stays bound to `127.0.0.1:8591`; LAN devices connect to port `5577` only. Vite development also uses port `5577`, bound to `127.0.0.1`.
 
-Development uses Vite. Production uses `frontend/server.mjs` to serve the built React application and proxy API requests. The data service handles reconciliation, imports, snapshot checks, and status reporting. Its scheduler is disabled by default; manual updates are available from Settings.
+The [web application guide](frontend/README.md) covers Bun scripts and LAN access. The [API service guide](backend/README.md) describes data setup, updates, and runtime storage.
 
 ## Repository layout
 
 ```text
-.
-├── backend/       FastAPI API service and data import flows
-├── frontend/      React application, Vite configuration, and production web server
-├── docs/          API, schema, data flow, storage, and asset documentation
-├── LICENSE
+├── backend/                 FastAPI API service and data import flows
+├── frontend/                React application, Vite configuration, and production web server
+├── LICENSE                  Apache License 2.0
 ├── NOTICE
 ├── README.md
-└── THIRD_PARTY_NOTICES.md
+└── THIRD_PARTY_NOTICES.md   Data, media, trademark, and dependency notices
 ```
 
 ## Requirements
 
 - Python 3.13 and Conda
-- Bun
-- Node.js 20.19+ or 22.12+
-- MongoDB
-- Network access to the Liquipedia API and VCT Reference dataset
+- Bun and Node.js 20.19+ or 22.12+; Node.js is required by the Vite toolchain and `frontend/server.mjs`
+- A reachable MongoDB instance
+- Network access to Liquipedia and VCT Reference for live data updates
 
-## First-time setup
+Install Bun using the [official installation guide](https://bun.sh/docs/installation).
 
-### API service
+## First setup
 
-Run these commands in Terminal from the project root:
+From the repository root, prepare the API service environment in a Terminal:
 
 ```bash
 cd backend
 conda env create -f environment.yml
 conda activate VCT-Analytics
 python -m pip install -e .
-Copy-Item .env.example .env
+cp .env.example .env
 ```
 
-Skip environment creation if `VCT-Analytics` already exists. Edit `backend/.env` for the local MongoDB connection and other settings. Do not commit `.env`.
+If the `VCT-Analytics` environment already exists, activate it and install the package without creating the environment again. Edit `backend/.env` with the MongoDB connection and database name. Live Liquipedia requests also require `LIQUIPEDIA_USER_AGENT` to identify VCT Analytics and include a contact address you control. Do not commit `.env`.
 
-`LIQUIPEDIA_USER_AGENT` must identify the application and include a contact address you control, as required for Liquipedia requests. Do not invent contact information. See the [Liquipedia API terms](https://liquipedia.net/api-terms-of-use).
-
-### Web application
+Install web application dependencies and create the production files from a Terminal at the repository root:
 
 ```bash
 cd frontend
 bun install
+bun run typecheck
 bun run build
 ```
 
-## Running the application
+## Run the application
 
-Start MongoDB first. Run the API service in one Terminal window:
+Start MongoDB separately. In one Terminal, start the API service:
 
 ```bash
 cd backend
 conda activate VCT-Analytics
-python manage.py run
+python manage.py start
 ```
 
-Run the production web server in a second window:
+In another Terminal, start the production web server:
 
 ```bash
 cd frontend
 bun run serve
 ```
 
-The production web server listens on `0.0.0.0:5577` and proxies `/api` to `127.0.0.1:8591`. Start, stop, and restart both services manually.
+The local web application is at `http://127.0.0.1:5577`. Manage the web server and API service separately; the API service also has explicit lifecycle commands. See the subdirectory guides for details. A first import can be run with the one-time update workflow documented in the API service guide. The recurring scheduler is disabled by default.
 
-## LAN access
+## Data sources and runtime files
 
-On the server, run `ipconfig` to find its private IPv4 address. On another device on the same local network, open:
+Liquipedia supplies the canonical schedule. The data service uses VCT Reference snapshot data for verified match statistics, then stores application records in MongoDB. Settings can start a manual update. The recurring scheduler is a separate process and remains disabled unless enabled in `.env`.
 
-```text
-http://SERVER_PRIVATE_IPV4:5577
-```
+The DuckDB snapshot is stored at `backend/var/data/vct-reference/vct.duckdb`. Runtime cache, reports, logs, process locks, metadata, temporary files, and backups live under `backend/var/`. Keep those files, `.env`, and MongoDB dumps out of commits. Team logos are maintained separately under `backend/var/assets/team-logos/`; player portraits are outside the project scope.
 
-## Data initialization and manual updates
+## License and third-party material
 
-After MongoDB and both application services are running, open Settings and use the manual update action. The data service reconciles Liquipedia schedule data, validates the VCT Reference snapshot, imports statistics only for verified match links, and records import status.
+The Apache License 2.0 covers original source code and original project documentation. It does not cover external datasets, team logos, media, or trademarks. See [LICENSE](LICENSE), [NOTICE](NOTICE), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-The VCT Reference DuckDB file is downloaded at runtime and stored at:
-
-```text
-backend/var/data/vct-reference/vct.duckdb
-```
-
-The snapshot and other runtime datasets are not covered by the project's Apache-2.0 code license.
-
-## Development workflow
-
-To run the web application with Vite:
-
-```bash
-cd frontend
-bun run dev
-```
-
-Vite listens on `127.0.0.1:5577` in development and proxies `/api` requests to the API service. The production server is `frontend/server.mjs`; use `bun run build` followed by `bun run serve` for production. After changing Python code, restart the API service manually. After changing the React application, rebuild it and restart the web server manually.
-
-## Runtime data and Git exclusions
-
-Runtime and local environment data should stay out of the source repository. This includes:
-
-- `.env` files
-- MongoDB data and database dumps
-- `vct.duckdb`, DuckDB metadata, and backups
-- Cache files, reports, logs, locks, and temporary files
-
-Keep the DuckDB snapshot and metadata under `backend/var/data/vct-reference/`; backups are stored under `backend/var/backups/vct-reference/`. These files are runtime data, not project source or Apache-licensed assets.
-
-## Data sources and third-party material
-
-Liquipedia is the canonical schedule source. Its textual content is available under CC BY-SA 3.0; reuse requires attribution and applicable share-alike compliance. Liquipedia images and media have separate licensing, which must be checked individually.
-
-VCT Reference supplies the DuckDB snapshot used for match statistics. The runtime snapshot is governed by [VCT Reference's dataset page](https://vct-reference.com/dataset) and [terms](https://vct-reference.com/terms), not by this project's code license.
-
-Team logos, Valorant, VCT, team names, and other marks remain subject to their respective rights and terms. The project is not affiliated with or endorsed by Riot Games. Third-party software dependencies also remain under their own licenses. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for details.
-
-## License
-
-Original source code and original project documentation are licensed under the Apache License, Version 2.0 (SPDX: Apache-2.0). See [LICENSE](LICENSE).
-
-This license does not cover match data, downloaded datasets, team logos, trademarks, or other third-party material. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Liquipedia text requires attribution and compliance with its CC BY-SA 3.0 terms; images and other media may have separate terms. The VCT Reference dataset is governed by its [dataset page](https://vct-reference.com/dataset) and [Terms of Service](https://vct-reference.com/terms). Riot Games and team marks remain with their respective rights holders. This project is not affiliated with or endorsed by Riot Games.
