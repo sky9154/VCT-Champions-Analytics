@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 2,
+  "teams": {
+    "100-thieves": {
+      "contentSha256": "e14cd3a92684b3d0ab797c876a4333755c5998306377a94d13140deaefe10a69",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 6017,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/100-thieves.png"
+    },
+    "edward-gaming": {
+      "contentSha256": "e4e27aab0e29a9fc36ac68c84d6a76f64ff3de296789a053698084a1ba28f569",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 3736,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/edward-gaming.png"
+    },
+    "fut-esports": {
+      "contentSha256": "648c3cbd55e0979340d5c86f707b0195d7a62259ef80453c6f48f2789935a49b",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 1311,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/fut-esports.png"
+    },
+    "g2-esports": {
+      "contentSha256": "7b2360ae3799f792724a317337d73bffc0f64ac0d24d636147a3b3e564ee9bb1",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 7761,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/g2-esports.png"
+    },
+    "global-esports": {
+      "contentSha256": "eac1d68226f6aea04fcfec70dbbfc5296e22852f5e268d4108e7d9cd501394d8",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 6225,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/global-esports.png"
+    },
+    "jdg-esports": {
+      "contentSha256": "0b98118f6bda8359bb1ce55ae3fa209876e642997b9a7a91b50e520195312dca",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 1928,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/jdg-esports.png"
+    },
+    "karmine-corp": {
+      "contentSha256": "ddb65494d4143393d4d54c26a32d46ade8370c81ea38aa3b4dbe5234a26afe08",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 3993,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/karmine-corp.png"
+    },
+    "loud": {
+      "contentSha256": "e3fa98e317a71f4b6bb3a19a98dfca15b6efd4864b995b89de2d726992244fe3",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 1732,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/loud.png"
+    },
+    "nongshim-redforce": {
+      "contentSha256": "71a2862e645ab1b6a57c4bbc3322b0d32cd9cd3638e481fa0fb30518cae7118d",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 5938,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/nongshim-redforce.png"
+    },
+    "nrg": {
+      "contentSha256": "d8df4155a27f456dd880b7db8ac7067e46ed803096ee560c40a31c5d30ec8216",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 1948,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/nrg.png"
+    },
+    "paper-rex": {
+      "contentSha256": "c5930d8328a3d365f771c599df5eb893deb03a9a284656d871d5c08c822fc76b",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 2742,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/paper-rex.png"
+    },
+    "t1": {
+      "contentSha256": "be9fba804cf16cc5763d4cb5bf82509d1e4acad9e83d562abae0d6d844c73662",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 1822,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/t1.png"
+    },
+    "team-liquid": {
+      "contentSha256": "e6e0d5ea3e9cdbd2ee22014acf60ab13bbfda6a5a458771985fce654484205bf",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 7929,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/team-liquid.png"
+    },
+    "team-vitality": {
+      "contentSha256": "1cf3a5d7c298f589bb8e0053e46c89e90116a47f13951436291271ed2b40c7f1",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 3535,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/team-vitality.png"
+    },
+    "tyloo": {
+      "contentSha256": "27ed8bc843e129c9648bdad092b58464b0c9a9a983ac530f1e2130fdbedebd41",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 12977,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/tyloo.png"
+    },
+    "xi-lai-gaming": {
+      "contentSha256": "634a0341b5cf22cf4ba720ec8e2ffc8e31f0bf342069320d751e35a3394d9085",
+      "mimeType": "image/png",
+      "retrievedAt": "2026-09-30T21:14:06.497163Z",
+      "sizeBytes": 5352,
+      "source": {
+        "kind": "manual-local",
+        "managedBy": "human"
+      },
+      "storageIdentity": "team-logos/xi-lai-gaming.png"
+    }
+  }
+}
