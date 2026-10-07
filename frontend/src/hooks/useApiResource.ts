@@ -15,8 +15,7 @@ export const useApiResource = <T,>(
   options: { keepPreviousData?: boolean } = {}
 ) => {
   const loadRef = useRef(load);
-  const requestId = useRef(0);
-  const previousData = useRef<{ hasValue: boolean; value: T | null }>({ hasValue: false, value: null });
+  const previousData = useRef<{ data: T } | null>(null);
   const [refreshVersion, setRefreshVersion] = useState(0);
   const [completedRefreshVersion, setCompletedRefreshVersion] = useState(0);
   const [resource, setResource] = useState<{
@@ -38,37 +37,30 @@ export const useApiResource = <T,>(
   useEffect(() => {
     if (key === null) {
       setResource({ identity: null, state: { status: "idle" } });
-      previousData.current = { hasValue: false, value: null };
+      previousData.current = null;
       return;
     }
 
     const controller = new AbortController();
-    const activeRequestId = requestId.current + 1;
-    requestId.current = activeRequestId;
     setResource({ identity, state: { status: "loading" } });
 
     loadRef.current(controller.signal)
       .then((data) => {
-        if (!controller.signal.aborted && requestId.current === activeRequestId) {
-          previousData.current = { hasValue: true, value: data };
+        if (!controller.signal.aborted) {
+          previousData.current = { data };
           setCompletedRefreshVersion(refreshVersion);
           setResource({ identity, state: { status: "success", data } });
         }
       })
       .catch((error: unknown) => {
-        if (!controller.signal.aborted && !isAbortError(error) && requestId.current === activeRequestId) {
+        if (!controller.signal.aborted && !isAbortError(error)) {
           setCompletedRefreshVersion(refreshVersion);
           setResource({ identity, state: { status: "error", error: toApiError(error) } });
         }
       });
 
-    return () => {
-      controller.abort();
-      if (requestId.current === activeRequestId) {
-        requestId.current += 1;
-      }
-    };
-  }, [identity, key, refreshVersion, retryIndex]);
+    return () => controller.abort();
+  }, [identity, key, refreshVersion]);
 
   const currentState = resource.identity === identity
     ? resource.state
@@ -77,11 +69,12 @@ export const useApiResource = <T,>(
       : { status: "loading" as const };
 
   const preservingRefresh = refreshVersion > completedRefreshVersion;
-  const hasPreviousData = (keepPreviousData || preservingRefresh) && key !== null && previousData.current.hasValue;
+  const retainedData = (keepPreviousData || preservingRefresh) && key !== null ? previousData.current : null;
+  const hasPreviousData = retainedData !== null;
   const isRefreshing = hasPreviousData && currentState.status !== "success" && currentState.status !== "error";
   const refreshError = hasPreviousData && currentState.status === "error" ? currentState.error : null;
-  const state = hasPreviousData && currentState.status !== "success"
-    ? { status: "success" as const, data: previousData.current.value as T }
+  const state = retainedData !== null && currentState.status !== "success"
+    ? { status: "success" as const, data: retainedData.data }
     : currentState;
 
   return {

@@ -1,4 +1,3 @@
-import { API_BASE_URL } from "../config";
 import type { ApiResponse } from "./types";
 
 
@@ -41,10 +40,17 @@ export const isAbortError = (error: unknown): boolean => (
   error instanceof DOMException && error.name === "AbortError"
 );
 
-const apiUrl = (path: string): string => {
-  const baseUrl = API_BASE_URL.replace(/\/$/, "");
-
-  return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
+export const getServiceErrorMessage = (error: unknown): string | null => {
+  if (!(error instanceof ApiError)) {
+    return null;
+  }
+  if (error.code === "NETWORK_ERROR" || error.code === "INVALID_RESPONSE") {
+    return error.userMessage;
+  }
+  if (error.statusCode === 404 || error.statusCode === 405) {
+    return "API 服務版本不相容，請更新並重新啟動服務。";
+  }
+  return null;
 };
 
 const request = async <T>(
@@ -61,7 +67,7 @@ const request = async <T>(
       headers["Content-Type"] = "application/json";
     }
 
-    response = await fetch(apiUrl(path), {
+    response = await fetch(`/api${path.startsWith("/") ? path : `/${path}`}`, {
       method,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),

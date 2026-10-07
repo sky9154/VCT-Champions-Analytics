@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ApiError } from "../../api/client";
+import { ApiError, getServiceErrorMessage } from "../../api/client";
 import { getSystemSettings, patchSystemSettings } from "../../api/system";
 import type { ApiResponse, SystemSettingItem, SystemSettingsData, SystemSettingsPatch } from "../../api/types";
 import { useApiResource } from "../../hooks/useApiResource";
@@ -38,31 +38,9 @@ const isValidDraft = (setting: SystemSettingItem, rawValue: string): boolean => 
 };
 
 const getSaveError = (error: unknown): string => {
-  if (error instanceof ApiError) {
-    if (error.code === "NETWORK_ERROR") {
-      return "目前無法連線至 API 服務，請確認服務已啟動。";
-    }
-
-    if (error.code === "INVALID_RESPONSE" || error.statusCode === 404 || error.statusCode === 405) {
-      return "API 服務版本不相容，請更新並重新啟動服務。";
-    }
-
-    return ERROR_MESSAGES[error.code] ?? "目前無法儲存設定，請稍後再試。";
-  }
-
-  return "目前無法儲存設定，請稍後再試。";
-};
-
-const getSettingsLoadError = (error: ApiError): string => {
-  if (error.code === "NETWORK_ERROR") {
-    return "目前無法連線至 API 服務，請確認服務已啟動。";
-  }
-
-  if (error.code === "INVALID_RESPONSE" || error.statusCode === 404 || error.statusCode === 405) {
-    return "API 服務版本不相容，請更新並重新啟動服務。";
-  }
-
-  return "目前無法取得設定，請稍後再試。";
+  return getServiceErrorMessage(error)
+    ?? (error instanceof ApiError ? ERROR_MESSAGES[error.code] : null)
+    ?? "目前無法儲存設定，請稍後再試。";
 };
 
 const SystemSettingsPanel = () => {
@@ -129,7 +107,7 @@ const SystemSettingsPanel = () => {
             <p>僅提供固定項目，不開放編輯其他環境變數。</p>
           </div>
         </div>
-        <p className="settings-inline-message" role="status">{getSettingsLoadError(resource.state.error)}</p>
+        <p className="settings-inline-message" role="status">{getServiceErrorMessage(resource.state.error) ?? "目前無法取得設定，請稍後再試。"}</p>
       </section>
     );
   }

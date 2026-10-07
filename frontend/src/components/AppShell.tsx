@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getDataStatus, getDataUpdateStatus, startDataUpdate } from "../api/dataStatus";
 import { refreshCoreData } from "../api/refresh";
 import { getSearch } from "../api/search";
-import { ApiError, isAbortError } from "../api/client";
+import { ApiError, getServiceErrorMessage, isAbortError } from "../api/client";
 import type { ApiResponse, DataStatusData, DataUpdateStatusData, SearchData } from "../api/types";
 import { useApiResource } from "../hooks/useApiResource";
 import { TeamMark } from "./ui/TeamMark";
@@ -42,35 +42,12 @@ interface SearchOption {
 type SearchPhase = "closed" | "opening" | "open" | "closing";
 
 const getUpdateStartFailureMessage = (error: unknown): string => {
-  if (!(error instanceof ApiError)) {
-    return "資料更新未完成，已保留上一次成功資料。";
-  }
-
-  if (error.code === "NETWORK_ERROR") {
-    return "目前無法連線至 API 服務，請確認服務已啟動。";
-  }
-
-  if (error.statusCode === 404 || error.statusCode === 405) {
-    return "API 服務版本不相容，請更新並重新啟動服務。";
-  }
-
-  if (error.code === "INVALID_RESPONSE") {
-    return "API 服務版本不相容，請更新並重新啟動服務。";
-  }
-
-  if (error.code === "DATA_UNAVAILABLE") {
-    return "目前無法取得資料，請稍後再試。";
-  }
-
-  if (error.code === "UPDATE_UNAVAILABLE") {
-    return "目前無法啟動資料更新，請稍後再試。";
-  }
-
-  if (error.statusCode !== null && error.statusCode >= 500) {
-    return "資料更新未完成，已保留上一次成功資料。";
-  }
-
-  return "資料更新未完成，已保留上一次成功資料。";
+  const serviceMessage = getServiceErrorMessage(error);
+  if (serviceMessage) return serviceMessage;
+  if (error instanceof ApiError && error.code === "DATA_UNAVAILABLE") return error.userMessage;
+  return error instanceof ApiError && error.code === "UPDATE_UNAVAILABLE"
+    ? "目前無法啟動資料更新，請稍後再試。"
+    : "資料更新未完成，已保留上一次成功資料。";
 };
 
 const AppShell = ({ children }: AppShellProps) => {
@@ -109,7 +86,6 @@ const AppShell = ({ children }: AppShellProps) => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchControlRef = useRef<HTMLFormElement>(null);
   const navHomeRef = useRef<HTMLAnchorElement>(null);
-  const searchRequestId = useRef(0);
   const isSearchOpen = searchPhase === "opening" || searchPhase === "open";
   const searchCollapsedWidth = viewportWidth <= 900
     ? SEARCH_COLLAPSED_NARROW_WIDTH
@@ -434,10 +410,6 @@ const AppShell = ({ children }: AppShellProps) => {
     }
 
     const controller = new AbortController();
-    const requestId = searchRequestId.current + 1;
-
-    searchRequestId.current = requestId;
-
     setSearchData(null);
     setSearchState("loading");
     setSearchMessage("");
@@ -446,7 +418,7 @@ const AppShell = ({ children }: AppShellProps) => {
     const timeoutId = window.setTimeout(() => {
       getSearch(query, controller.signal)
         .then((response) => {
-          if (controller.signal.aborted || searchRequestId.current !== requestId) {
+          if (controller.signal.aborted) {
             return;
           }
           setSearchData(response.data);
@@ -457,7 +429,7 @@ const AppShell = ({ children }: AppShellProps) => {
           setSearchMessage(`搜尋完成，共找到 ${total} 筆結果。`);
         })
         .catch((error: unknown) => {
-          if (controller.signal.aborted || isAbortError(error) || searchRequestId.current !== requestId) {
+          if (controller.signal.aborted || isAbortError(error)) {
             return;
           }
 
@@ -471,9 +443,6 @@ const AppShell = ({ children }: AppShellProps) => {
       window.clearTimeout(timeoutId);
       controller.abort();
 
-      if (searchRequestId.current === requestId) {
-        searchRequestId.current += 1;
-      }
     };
   }, [isSearchOpen, searchQuery]);
 
