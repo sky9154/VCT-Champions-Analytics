@@ -1,6 +1,6 @@
 # VCT Champions 2026 Analytics
 
-![VCT Champions 2026 Analytics](./docs/images/readme-banner.png)
+![VCT Champions 2026 Analytics](./docs/images/readme-banner.webp)
 
 A web application for exploring VCT Champions 2026 schedules, teams, players, rankings, and match trends. Liquipedia is the canonical schedule source. Verified match statistics come from the VCT Reference DuckDB snapshot, and MongoDB stores application data.
 
